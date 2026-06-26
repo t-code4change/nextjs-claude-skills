@@ -1,0 +1,30 @@
+# Next.js Best Practices for Windsurf
+
+## Architecture
+- Server Components by default — `'use client'` at leaf level only
+- Data fetching in Server Components, not useEffect
+- Server Actions = mutations only
+
+## SEO
+- metadataBase in root layout
+- viewport separate from metadata export  
+- generateMetadata() for dynamic pages
+- Canonical URL on every page
+- JSON-LD structured data
+
+## Performance
+- next/image with explicit dimensions and sizes attribute
+- priority prop only on LCP image
+- next/font, never external font links
+- next/script with afterInteractive for analytics
+- Promise.all for parallel data fetching
+- dynamic() imports for heavy components
+- No barrel file imports
+
+## Caching (Next.js 16)
+- 'use cache' + cacheTag() + cacheLife()
+- updateTag() after mutations
+- Suspense for dynamic content
+
+## Core Web Vitals
+- LCP < 2.5s, INP < 200ms, CLS < 0.1

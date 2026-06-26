@@ -1,0 +1,56 @@
+---
+description: Next.js App Router best practices — SEO, performance, caching, Server Components
+globs: ["**/*.tsx", "**/*.ts", "**/app/**", "**/components/**"]
+alwaysApply: true
+---
+
+# Next.js Best Practices
+
+## Server vs Client Components
+- Default to Server Components. Add `'use client'` only for useState/useEffect/browser APIs
+- Place `'use client'` at leaf level (smallest boundary possible)
+- Never import Server Components into Client Components — pass as `children`
+
+## Data Fetching
+- Fetch in Server Components, not useEffect
+- Use `Promise.all()` for parallel independent fetches
+- Server Actions = mutations only, never data fetching
+- Next.js 15+: await params, cookies(), headers()
+
+## SEO — Every Page
+- `metadataBase` in root layout (required for relative OG URLs)
+- `viewport` as separate export — NOT inside metadata object
+- `generateMetadata()` for dynamic routes
+- Canonical URL on every indexable page
+- JSON-LD structured data on key pages (Organization, Product, Article, FAQ)
+- Never block `/_next/` in robots.txt
+
+## Images (next/image only)
+- `priority` on the LCP image (hero/above-fold)
+- Explicit `width`/`height` OR `fill` + sized container — prevents CLS
+- `sizes` attribute matching actual rendered width
+- `quality={85}` for hero images
+
+## Fonts (next/font only)
+- Never Google Fonts `<link>` tags or CSS `@import`
+- Always `display: 'swap'`
+
+## Scripts
+- `next/script` with `strategy="afterInteractive"` for analytics
+- Use `@next/third-parties/google` for GA4
+
+## Bundle
+- Direct imports — never barrel/index file imports in Client Components
+- `dynamic(() => import('./Heavy'))` for non-critical heavy components
+
+## Caching (Next.js 16)
+- `'use cache'` = first statement, function must be async
+- Always pair: cacheTag() + cacheLife()
+- No cookies()/headers() inside 'use cache'
+- updateTag() in Server Actions after mutations
+- Wrap dynamic content in <Suspense>
+
+## Core Web Vitals
+- LCP < 2.5s: priority on hero image, fast TTFB, next/font
+- INP < 200ms: useTransition, useDeferredValue, no blocking event handlers
+- CLS < 0.1: image dimensions, font swap, min-height for async content
